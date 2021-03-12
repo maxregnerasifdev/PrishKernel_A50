@@ -66,6 +66,7 @@ echo "4 = Kernel+zip"
 echo "5 = AIK+ZIP"
 echo "6 = Anykernel"
 echo "7 = Exit"
+echo "8 = TEST"
 read n
 
 if [ $n -eq 1 ]; then
@@ -253,5 +254,57 @@ echo "========"
 exit
 fi
 
-
-
+if [ $n -eq 8 ]; then
+echo "======================="
+echo "Making kernel with ZIP"
+echo "======================="
+make clean && make mrproper
+rm ./arch/arm64/boot/Image
+rm ./arch/arm64/boot/Image.gz
+rm ./Image
+rm ./output/*.zip
+rm ./PRISH/AIK/image-new.img
+rm ./PRISH/AIK/ramdisk-new.cpio.empty
+rm ./PRISH/AIK/split_img/boot.img-zImage
+rm ./PRISH/AK/Image
+rm ./PRISH/ZIP/PRISH/NXT/boot.img
+rm ./PRISH/ZIP/PRISH/A50/boot.img
+rm ./PRISH/ZIP/PRISH/A50/boot.img
+rm ./PRISH/AK/*.zip
+rm ./TEST/*.zip
+clear
+############################################
+# If other device make change here
+############################################
+echo "======================="
+echo "Making kernel with ZIP"
+echo "======================="
+make A50dd_defconfig
+make -j$(nproc --all)
+echo "Kernel Compiled"
+echo ""
+echo "======================="
+echo "Packing Kernel INTO ZIP"
+echo "======================="
+echo ""
+cp -r ./arch/arm64/boot/Image ./PRISH/AIK/split_img/boot.img-zImage
+cp -r ./arch/arm64/boot/Image ./PRISH/AK/Image
+./PRISH/AIK/repackimg.sh
+cp -r ./PRISH/AIK/image-new.img ./TEST/PRISH/D/A50/boot.img
+rm ./TEST/*.zip
+cd TEST
+echo "==========================="
+echo "Packing into Flashable zip"
+echo "==========================="
+. zip.sh
+cd ..
+cp -r ./TEST/*.zip ./output/PrishKernel-TEST-ONEUI-R2-A50dd.zip
+cd output
+echo ""
+pwd
+cd ..
+echo " "
+echo "======================================================="
+echo "get PrishKernel-Px-QQ-A50dd.zip from upper given path"
+echo "======================================================="
+fi
