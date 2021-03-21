@@ -15,37 +15,30 @@ export KBUILD_BUILD_HOST=hell
 # CCACHE
 export CCACHE="$(which ccache)"
 export USE_CCACHE=1
-export CCACHE_EXEC="/home/neel/Desktop/ccache"
 ccache -M 50G
 export CCACHE_COMPRESS=1
 
+# install dep
+curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash
+sudo apt install python
+sudo apt update && sudo apt upgrade && sudo apt install gcc && sudo apt-get install -y build-essential kernel-package libncurses5-dev bzip2 && sudo apt-get install git ccache automake lzop bison gperf build-essential zip curl zlib1g-dev zlib1g-dev:i386 g++-multilib python-networkx libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng
+sudo apt-get install manpages-de && sudo apt-get install gcc-arm-linux-gnueabi
+sudo apt-get install libssl-dev
+sudo apt install gcc
+
 # TC LOCAL PATH
-export CROSS_COMPILE=/home/neel/Desktop/toolchain/linaro/bin/aarch64-linux-gnu-
-export CLANG_TRIPLE=/home/neel/Desktop/toolchain/clang/bin/aarch64-linux-gnu-
-export CC=/home/neel/Desktop/toolchain/clang/bin/clang
-
-# Export toolchain/cross flags
-#export TOOLCHAIN="aarch64-linux-android-"
-#export CLANG_TRIPLE="aarch64-linux-gnu-"
-#export CROSS_COMPILE="$(pwd)/gcc/bin/${TOOLCHAIN}"
-#export CROSS_COMPILE_ARM32="$(pwd)/gcc32/bin/arm-linux-androideabi-"
-#export WITH_OUTDIR=true
-
-# Export PATH flag
-#export PATH="${PATH}:$(pwd)/clang/bin:$(pwd)/gcc/bin:$(pwd)/gcc32/bin"
+export CROSS_COMPILE=$(pwd)/gcc/bin/aarch64-linux-android-
+export CLANG_TRIPLE=$(pwd)/clang/bin/aarch64-linux-gnu-
+export CC=$(pwd)/clang/bin/clang
 
 # Check if have gcc/32 & clang folder
-#if [ ! -d "$(pwd)/gcc/" ]; then
-#   git clone --depth 1 git://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 gcc
-#fi
+if [ ! -d "$(pwd)/gcc/" ]; then
+   git clone --depth 1 git://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 gcc
+fi
 
-#if [ ! -d "$(pwd)/gcc32/" ]; then
-#   git clone --depth 1 git://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 gcc32
-#fi
-
-#if [ ! -d "$(pwd)/clang/" ]; then
-#   git clone --depth 1 https://github.com/PrishKernel/toolchains.git -b proton-clang12 clang
-#fi
+if [ ! -d "$(pwd)/clang/" ]; then
+   git clone --depth 1 https://github.com/PrishKernel/toolchains.git -b proton-clang12 clang
+fi
 
 clear
 echo "                                                     "
