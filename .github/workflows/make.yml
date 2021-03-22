@@ -6,10 +6,9 @@ on:
   pull_request:
     branches: [ R3 ]
     
-jobs:
+jobs: -j64
   build:
   
-    steps:
     - name: Send message in telegram
       env: 
           CHAT_ID: ${{ secrets.CHAT_ID }}
