@@ -34,7 +34,7 @@ jobs:
     - name: Clone source
       run: |
           cd ~
-          git clone https://github.com/${GITHUB_REPOSITORY} kernel --depth=1
+          git clone https://github.com/neel0210/${GITHUB_REPOSITORY} kernel --depth=1
       # Build!
     - name: Build!
       run: |
