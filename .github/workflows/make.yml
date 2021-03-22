@@ -1,0 +1,48 @@
+name: C/C++ CI
+# Credits to Hendra Manudinata @hendramanu for script he has done in his Bluefly kernel
+on:
+  push:
+    branches: [ R3 ]
+  pull_request:
+    branches: [ R3 ]
+    steps:
+    - name: Send message in telegram
+      env: 
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }} 
+      run: |-
+          curl -F text="Started Compiling" "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&parse_mode=Markdown"
+    - name: Prepare
+      run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install \
+          bison build-essential curl flex git gnupg gperf \
+          liblz4-tool libncurses5-dev libsdl1.2-dev libxml2 \
+          libxml2-utils lzop pngcrush schedtool \
+          squashfs-tools xsltproc zip zlib1g-dev \
+          build-essential kernel-package libncurses5-dev \
+          bzip2 git python expect \
+          gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
+          curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash
+
+      # Clone source
+    - name: Clone source
+      run: |
+          cd ~
+          git clone https://github.com/${GITHUB_REPOSITORY} kernel --depth=1
+      # Build!
+    - name: Build!
+      run: |
+          cd ~/kernel
+          bash A50.sh
+      # Upload    
+    - name: Upload
+      env:
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }} 
+      run: |
+          cd ~/kernel/output
+          for i in *.zip; do
+          curl -F chat_id=$CHAT_ID -F document=@$i -F parse_mode=markdown caption="PrishKernel A50" https://api.telegram.org/bot$BOT_TOKEN/sendDocument
+          done
+          
