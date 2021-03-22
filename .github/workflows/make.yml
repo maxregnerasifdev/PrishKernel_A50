@@ -5,12 +5,20 @@ on:
     branches: [ R3 ]
   pull_request:
     branches: [ R3 ]
-    
-jobs: -j64
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
   build:
-  
-    - name: Send message in telegram
-      env: 
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+# send message in Telegram
+
+    env: 
           CHAT_ID: ${{ secrets.CHAT_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }} 
       run: |-
