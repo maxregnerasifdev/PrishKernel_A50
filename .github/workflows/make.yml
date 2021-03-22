@@ -1,24 +1,19 @@
 name: C/C++ CI
-# Credits to Hendra Manudinata @hendramanu for script he has done in his Bluefly kernel
+# Credits to Hendra Manudinata @hendramanu and @AkiraNoSushi
 on:
   push:
-    branches: [ R3 ]
+    branches: [ 4.14.116 ]
   pull_request:
-    branches: [ R3 ]
+    branches: [ 4.14.116 ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-18.04
 
-# send message in Telegram
+    runs-on: ubuntu-latest
 
-    env: 
+    steps:
+    - name: Send message in telegram
+      env: 
           CHAT_ID: ${{ secrets.CHAT_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }} 
       run: |-
@@ -35,7 +30,6 @@ jobs:
           bzip2 git python expect \
           gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
           curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash
-
       # Clone source
     - name: Clone source
       run: |
@@ -44,6 +38,10 @@ jobs:
       # Build!
     - name: Build!
       run: |
+          curl -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"chat_id": "$CHAT_ID", "text": "Starting compilation", "disable_notification": true}' \
+           https://api.telegram.org/bot$BOT_TOKEN/sendMessage
           cd ~/kernel
           bash A50.sh
       # Upload    
@@ -54,6 +52,5 @@ jobs:
       run: |
           cd ~/kernel/output
           for i in *.zip; do
-          curl -F chat_id=$CHAT_ID -F document=@$i -F parse_mode=markdown caption="PrishKernel A50" https://api.telegram.org/bot$BOT_TOKEN/sendDocument
+          curl -F chat_id=$CHAT_ID -F document=@$i -F parse_mode=markdown caption="PrishKernel M31" https://api.telegram.org/bot$BOT_TOKEN/sendDocument
           done
-          
