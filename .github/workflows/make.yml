@@ -5,6 +5,10 @@ on:
     branches: [ R3 ]
   pull_request:
     branches: [ R3 ]
+    
+jobs:
+  build:
+  
     steps:
     - name: Send message in telegram
       env: 
