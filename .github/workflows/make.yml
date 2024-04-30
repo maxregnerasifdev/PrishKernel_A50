@@ -21,7 +21,7 @@ jobs:
           libxml2-utils lzop pngcrush schedtool \
           squashfs-tools xsltproc zip zlib1g-dev \
           build-essential libncurses5-dev \
-          bzip2 git 2to3 python2-minimal python2 dh-python python-is-python expect \
+          bzip2 git 2to3 python2-minimal python2 dh-python python-is-python3 expect \
           gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
           curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash
       # Clone source
